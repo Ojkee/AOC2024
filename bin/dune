@@ -1,0 +1,6 @@
+(executable
+ (public_name AOC2024)
+ (name main)
+ (modules main day1 day2 day3 day4 day5 day6)
+ (libraries AOC2024 str))
+
