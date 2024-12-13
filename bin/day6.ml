@@ -64,4 +64,15 @@ let part1 () =
   | Some (row, col) ->
       print_endline
         (string_of_int (simulate_guard board row col (-1) 0 visited line_len))
-  | None -> Printf.printf "Znak nie znaleziony\n"
+  | None -> print_endline "Doesn't find starting point"
+
+let part2 () =
+  let ic = open_in "data/day6_test.txt" in
+  let line_len = String.length (input_line ic) in
+  seek_in ic 0;
+  let content = In_channel.input_all ic in
+  let board =
+    List.map (fun x -> explode x) (String.split_on_char '\n' content)
+  in
+  print_endline (string_of_int line_len);
+  print_board board
