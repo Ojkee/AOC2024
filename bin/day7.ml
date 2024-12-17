@@ -29,7 +29,8 @@ let part1 () =
   in
   close_in ic;
 
-  List.map (fun x -> parse_line x |> zero_non_possible evaluate) content
+  content
+  |> List.map (fun x -> parse_line x |> zero_non_possible evaluate)
   |> sum |> string_of_int |> print_endline
 
 let concat_ints lhs rhs =
@@ -54,5 +55,6 @@ let part2 () =
   in
   close_in ic;
 
-  List.map (fun x -> parse_line x |> zero_non_possible evaluate_concat) content
+  content
+  |> List.map (fun x -> parse_line x |> zero_non_possible evaluate_concat)
   |> sum |> string_of_int |> print_endline
