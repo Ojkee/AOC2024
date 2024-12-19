@@ -54,11 +54,25 @@ let part1 () =
   content |> init_mem |> flatten |> fragment |> mul_pos |> string_of_int
   |> print_endline
 
+let free_spots lst =
+  let rec free_spots' lst acc =
+    match lst with 
+  | [] -> acc
+    | h::t -> if h = -1 then free_spots' t (acc + 1) else free_spots' t acc
+  in
+  free_spots' lst 0
+
+(* 1313165 *)
+
+(* 0...1...2......33333 *)
+(* 0...1...233333...... *)
+(* 02..1....33333...... *)
+(* 021......33333...... *)
+
 let part2 () =
-  let ic = open_in "data/day9_test.txt" in
+  let ic = open_in "data/day9_test_1.txt" in
   let content =
     In_channel.input_all ic |> String.trim |> explode
     |> List.map (fun x -> int_of_char x - 48)
   in
-  content |> init_mem |> flatten |> List.map string_of_int |> String.concat " "
-  |> print_endline
+  

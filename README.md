@@ -9,3 +9,4 @@
 - [x] Day 7
 - [x] Day 8
 - [ ] Day 9 part 2 
+- [x] Day 10
