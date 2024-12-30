@@ -11,4 +11,5 @@
 - [ ] Day 9 part 2 
 - [x] Day 10
 - [x] Day 11
-- [ ] Day 12 
+- [ ] Day 12 part 2
+- [x] Day 13

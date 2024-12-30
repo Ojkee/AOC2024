@@ -45,7 +45,7 @@ let scan_area cell y x garden =
   let ar, pe = scan_area' y x 0 0 in
   ar * pe
 
-let scan_garden garden =
+let scan_garden perimeter_counter garden =
   let rec scan_garden' y x result =
     match List.nth_opt garden y with
     | None -> result
@@ -55,7 +55,7 @@ let scan_garden garden =
         | Some cell ->
             if VisitedLoc.mem (y, x) !visited then scan_garden' y (x + 1) result
             else
-              let price = scan_area cell y x garden in
+              let price = perimeter_counter cell y x garden in
               scan_garden' y (x + 1) (result + price))
   in
   scan_garden' 0 0 0
@@ -66,7 +66,47 @@ let part1 () =
     In_channel.input_all ic |> String.split_on_char '\n' |> List.map String.trim
     |> List.map explode
   in
-  garden |> scan_garden |> string_of_int |> print_endline
+  garden |> scan_garden scan_area |> string_of_int |> print_endline
+
+let rec flood_fill cell y x garden =
+  if VisitedLoc.mem (y, x) !visited then 0
+  else if y < 0 || x < 0 then 0
+  else
+    match List.nth_opt garden y with
+    | None -> 0
+    | Some row -> (
+        match List.nth_opt row x with
+        | None -> 0
+        | Some c ->
+            if c = cell then (
+              visited := VisitedLoc.add (y, x) !visited;
+              flood_fill cell (y - 1) x garden
+              + flood_fill cell (y + 1) x garden
+              + flood_fill cell y (x - 1) garden
+              + flood_fill cell y (x + 1) garden
+              + 1)
+            else 0)
+
+let turn_left dy dx =
+  if dy = -1 then (0, -1)
+  else if dy = 1 then (0, 1)
+  else if dx = 1 then (-1, 0)
+  else (1, 0)
+
+let can_go_left cell y x ldy ldx garden =
+  let dy, dx = turn_left ldy ldx in
+  if y + dy < 0 || x + dx < 0 then false
+  else
+    match List.nth_opt garden (y + dy) with
+    | None -> false
+    | Some row -> (
+        match List.nth_opt row (x + dx) with
+        | None -> false
+        | Some c -> if c <> cell then false else true)
+
+let turn_right dy dx =
+  let dy', dx' = turn_left dy dx in
+  (dy' * -1, dx' * -1)
 
 (* TEST = 1206 *)
 let part2 () =
