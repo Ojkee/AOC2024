@@ -50,15 +50,34 @@ let part1 () =
   |> safety_farcor bath_size |> string_of_int |> print_endline
 
 let is_vec_in_pos (v : vec) (p : vec list) : bool =
-  List.for_all (fun v' -> v'.x <> v.x && v'.y <> v.y) p
+  List.for_all (fun v' -> v'.x <> v.x && v'.y <> v.y) p |> not
 
 let render (bath_size : vec) (p : vec list) : unit =
-  let bath_map =
-    List.init bath_size.y (fun _ -> List.init bath_size.x (fun _ -> "."))
-  in
+  for i = 0 to bath_size.y - 1 do
+    for j = 0 to bath_size.x - 1 do
+      if List.exists (fun v' -> v'.y = i && v'.x = j) p then print_string "#"
+      else print_string "."
+    done;
+    print_newline ()
+  done;
+  print_newline ();
+  print_newline ()
+
+module IntSet = Set.Make (struct
+  type t = vec
+
+  let compare = Stdlib.compare
+end)
 
 let part2 () =
   let ic = open_in "data/day14.txt" in
   let bath_size = { x = 101; y = 103 } in
   let robots = In_channel.input_lines ic |> List.map (fun x -> scan_robot x) in
-  robots |> List.map (fun x -> calc_pos x 1 bath_size) |> render bath_size
+  for i = 1 to 10000 do
+    let n =
+      robots
+      |> List.map (fun x -> calc_pos x i bath_size)
+      |> IntSet.of_list |> IntSet.cardinal
+    in
+    if n = List.length robots then i |> string_of_int |> print_endline
+  done
