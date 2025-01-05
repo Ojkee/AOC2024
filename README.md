@@ -13,3 +13,6 @@
 - [x] Day 11
 - [ ] Day 12 part 2
 - [x] Day 13
+- [x] Day 14
+- [ ] Day 15 part 2 
+- [ ] Day 16
